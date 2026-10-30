@@ -1,0 +1,11 @@
+/node_modules/
+/build/
+/release/
+__pycache__/
+*.pyc
+.DS_Store
+*.gguf
+*.safetensors
+.venv*/
+.env*
+*.env

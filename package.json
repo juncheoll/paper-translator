@@ -1,0 +1,44 @@
+{
+  "name": "paper-translator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Context-aware PDF paper translation with independent browser and server backends",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "watch": "webpack --mode=development --watch",
+    "test": "jest --runInBand",
+    "package": "python3 tools/package_beta.py"
+  },
+  "dependencies": {
+    "@wllama/wllama": "3.8.1",
+    "ky": "1.7.4",
+    "webextension-polyfill": "0.10.0"
+  },
+  "devDependencies": {
+    "webpack": "5.94.0",
+    "webpack-cli": "5.0.1",
+    "copy-webpack-plugin": "6.4.1",
+    "@babel/core": "7.27.4",
+    "@babel/preset-env": "7.27.2",
+    "babel-jest": "30.0.2",
+    "jest": "30.0.2",
+    "jsdom": "26.1.0",
+    "acorn": "8.15.0",
+    "markdown-it": "14.3.3"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    },
+    "testEnvironment": "node",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!ky)/"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/build/"
+    ],
+    "moduleNameMapper": {
+      "^/src/(.*)$": "<rootDir>/src/$1"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+# CPU layout service reference environment: Python 3.12, macOS Apple Silicon.
+# Pin the model/runtime packages used by the verified service. This is not an
+# all-platform lockfile; transitive dependencies are resolved by pip.
+# On Windows/Linux install the matching CPU torch/torchvision wheels first,
+# with the PyTorch CPU wheel index to avoid CUDA package downloads.
+docling==2.144.0
+docling-core==2.105.0
+docling-parse==7.24.1
+docling-ibm-models==4.0.4
+torch==2.15.0
+torchvision==0.29.2
+transformers==5.21.0
+huggingface_hub==1.33.0
+pypdfium2==5.14.0
+numpy==2.5.4
+pillow==13.0.0

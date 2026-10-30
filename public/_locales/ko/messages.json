@@ -1,0 +1,512 @@
+{
+  "LLM_Execution_API": {
+    "message": "API (Ollama / 서버)"
+  },
+  "LLM_Execution_Browser": {
+    "message": "브라우저에서 실행 (WebGPU)"
+  },
+  "Docling_Helper_Title": {
+    "message": "PDF 레이아웃 (Docling CPU)"
+  },
+  "Docling_Helper_Help": {
+    "message": "도우미를 최초 한 번 설치하고 여기에서 모델을 준비하세요. PDF 분석은 이 PC의 CPU에서 실행하며, 시작할 때는 받은 모델만 사용합니다."
+  },
+  "Docling_Helper_Auto_Start": {
+    "message": "PDF를 열 때 Docling 자동 시작"
+  },
+  "Docling_Helper_Keep_Open": {
+    "message": "준비 중에는 설정을 새 탭으로 열어 두세요. 팝업을 닫으면 준비 요청이 취소됩니다. 중지 상태를 유지하려면 자동 시작을 끄세요."
+  },
+  "Docling_Helper_Install_Guide": {
+    "message": "도우미 설치 안내"
+  },
+  "Docling_Helper_Prepare": {
+    "message": "PDF 분석 준비"
+  },
+  "Docling_Helper_Start": {
+    "message": "시작"
+  },
+  "Docling_Helper_Refresh": {
+    "message": "상태 새로고침"
+  },
+  "Docling_Helper_Stop": {
+    "message": "중지·메모리 해제"
+  },
+  "Docling_Helper_Cancel": {
+    "message": "준비 취소"
+  },
+  "Docling_Helper_Not_Checked": {
+    "message": "도우미 상태를 아직 확인하지 않았습니다."
+  },
+  "Docling_Helper_Not_Installed": {
+    "message": "Docling 도우미를 최초 한 번 설치한 뒤 상태를 새로고침하세요."
+  },
+  "Docling_Helper_Model_Missing": {
+    "message": "도우미가 설치되었습니다. PDF 분석 준비를 눌러 모델을 다운로드하세요."
+  },
+  "Docling_Helper_Cached": {
+    "message": "모델 다운로드 완료 · 분석 서비스 중지 상태"
+  },
+  "Docling_Helper_Running": {
+    "message": "분석 서비스 실행 중 · 모델은 필요할 때 불러옵니다."
+  },
+  "Docling_Helper_Loaded": {
+    "message": "CPU 분석 모델이 메모리에 준비되었습니다."
+  },
+  "Docling_Helper_External": {
+    "message": "기존 Docling 서비스에 연결되었습니다."
+  },
+  "Docling_Helper_External_Help": {
+    "message": "도우미 밖에서 시작한 서비스입니다. 기존 실행 방법으로 중지하세요. 도우미는 이 프로세스를 종료하지 않습니다."
+  },
+  "Docling_Helper_Busy": {
+    "message": "Docling이 작업 중입니다. 완료 후 다시 시도하세요."
+  },
+  "Docling_Helper_Downloading": {
+    "message": "레이아웃 모델 다운로드 중"
+  },
+  "Docling_Helper_Starting": {
+    "message": "Docling 시작 중"
+  },
+  "Docling_Helper_Loading": {
+    "message": "CPU에 레이아웃 모델 불러오는 중"
+  },
+  "Docling_Helper_Disconnected": {
+    "message": "도우미 연결이 끊겼습니다. 상태를 새로고침하거나 현재 확장에 맞게 도우미를 다시 설치하세요."
+  },
+  "Docling_Helper_Timeout": {
+    "message": "도우미 응답 시간이 초과되었습니다. 상태를 확인한 뒤 다시 시도하세요."
+  },
+  "Docling_Helper_Forbidden": {
+    "message": "도우미에 이 확장이 허용되지 않았습니다. 현재 확장 ID로 도우미를 다시 설치하세요."
+  },
+  "Docling_Helper_Failed": {
+    "message": "Docling 도우미 작업에 실패했습니다."
+  },
+  "Browser_AI_Models": {
+    "message": "브라우저 모델"
+  },
+  "Browser_AI_Help": {
+    "message": "다운로드·준비를 누르면 모델을 다운로드합니다. 번역과 RAG는 이 기기에서 실행하고 Docling 연결은 현재 설정을 유지합니다."
+  },
+  "Browser_AI_Translation": {
+    "message": "번역 모델"
+  },
+  "Browser_AI_Embedding": {
+    "message": "RAG 임베딩 모델"
+  },
+  "Browser_AI_Prepare": {
+    "message": "다운로드·준비"
+  },
+  "Browser_AI_Refresh": {
+    "message": "상태 새로고침"
+  },
+  "Browser_AI_Stop": {
+    "message": "중지"
+  },
+  "Browser_AI_Unload": {
+    "message": "모델 메모리 해제"
+  },
+  "Browser_AI_Delete_Cache": {
+    "message": "모델 캐시 삭제"
+  },
+  "Browser_AI_Not_Downloaded": {
+    "message": "다운로드 전"
+  },
+  "Browser_AI_Status_Unknown": {
+    "message": "상태 미확인"
+  },
+  "Browser_AI_Cached": {
+    "message": "다운로드됨"
+  },
+  "Browser_AI_Loaded": {
+    "message": "메모리에 준비됨"
+  },
+  "Browser_AI_Downloading": {
+    "message": "모델 다운로드 중"
+  },
+  "Browser_AI_Loading": {
+    "message": "모델 불러오는 중"
+  },
+  "Browser_AI_Generating": {
+    "message": "번역 중"
+  },
+  "Browser_AI_Embedding_Running": {
+    "message": "임베딩 생성 중"
+  },
+  "Browser_AI_GPU_Unavailable": {
+    "message": "WebGPU를 사용할 수 없습니다. 하드웨어 가속을 확인하거나 API 실행을 선택하세요."
+  },
+  "Browser_AI_Status_Failed": {
+    "message": "브라우저 모델 상태를 확인하지 못했습니다."
+  },
+  "Browser_AI_Model_Error": {
+    "message": "브라우저 모델 작업에 실패했습니다."
+  },
+  "Browser_AI_Busy": {
+    "message": "브라우저 모델이 사용 중입니다."
+  },
+  "Browser_AI_Cancelled": {
+    "message": "중지했습니다. 다운로드된 모델 파일은 캐시에 남습니다."
+  },
+  "Browser_AI_Prepare_Required": {
+    "message": "설정에서 사용하는 브라우저 모델을 먼저 다운로드·준비해 주세요."
+  },
+  "Browser_AI_Open_Settings_Tab": {
+    "message": "설정을 새 탭에서 열기"
+  },
+  "Browser_AI_Keep_Open_Help": {
+    "message": "다운로드 중에는 이 화면을 열어 두세요. 팝업이 닫히면 중지되므로 새 탭에서 준비하는 것을 권장합니다."
+  },
+  "PDF_Translation_Error_Math": {
+    "message": "번역에서 수학 기호가 누락되거나 바뀌었습니다. 이 문장을 다시 번역해 주세요."
+  },
+  "PDF_Source_Variable_Tooltip": {
+    "message": "원본 PDF 변수 설명"
+  },
+  "PDF_Variable_Evidence": {
+    "message": "본문에서 찾은 설명 근거"
+  },
+  "PDF_Variable_Not_Found": {
+    "message": "본문에서 이 변수의 설명을 찾지 못했습니다."
+  },
+  "PDF_Variable_View_Source": {
+    "message": "설명 원문 보기"
+  },
+  "PDF_Variable_Explain": {
+    "message": "본문 설명 찾기"
+  },
+  "PDF_Visual_Loading": {
+    "message": "원본 영역을 불러오는 중…"
+  },
+  "PDF_Visual_Formula": {
+    "message": "원본 수식"
+  },
+  "PDF_Visual_Table": {
+    "message": "원본 표"
+  },
+  "PDF_Visual_Failed": {
+    "message": "원본 영역을 불러오지 못했습니다."
+  },
+  "PDF_Visual_Retry": {
+    "message": "다시 불러오기"
+  },
+  "PDF_Visual_Variable_Help": {
+    "message": "변수에 마우스를 올리면 본문 설명을 표시합니다."
+  },
+  "PDF_Region_Geometry": {
+    "message": "경계·분할 수정"
+  },
+  "PDF_Region_Geometry_Help": {
+    "message": "손잡이와 분할선을 드래그하세요. 저장 후 각 영역의 분류를 따로 지정할 수 있습니다. (방향키: 미세 조절)"
+  },
+  "PDF_Region_Resize_Handle": {
+    "message": "경계 조절 손잡이"
+  },
+  "PDF_Region_Split_Line": {
+    "message": "분할선"
+  },
+  "PDF_Region_Split": {
+    "message": "영역 나누기"
+  },
+  "PDF_Region_No_Split": {
+    "message": "나누지 않음"
+  },
+  "PDF_Region_Split_Horizontal": {
+    "message": "위·아래로 나누기"
+  },
+  "PDF_Region_Split_Vertical": {
+    "message": "왼쪽·오른쪽으로 나누기"
+  },
+  "PDF_Region_Reset_Geometry": {
+    "message": "원래 영역으로 복원"
+  },
+  "PDF_Region_Restore_Geometry_Help": {
+    "message": "복원하면 원래 영역 전체의 분할과 수정이 함께 해제됩니다."
+  },
+  "PDF_Region_Edit_Title": {
+    "message": "영역 분류 수정"
+  },
+  "PDF_Region_Classification": {
+    "message": "분류 / 번역 대상"
+  },
+  "PDF_Region_Exclude": {
+    "message": "번역에서 제외"
+  },
+  "PDF_Region_Reset": {
+    "message": "자동 분류로 복원"
+  },
+  "PDF_Region_Cancel": {
+    "message": "취소"
+  },
+  "PDF_Region_Save": {
+    "message": "저장"
+  },
+  "PDF_Region_Save_Failed": {
+    "message": "영역 수정을 저장하지 못했습니다. 기존 수정은 유지됩니다."
+  },
+  "PDF_Region_Manual": {
+    "message": "수정"
+  },
+  "PDF_Region_Excluded": {
+    "message": "제외"
+  },
+  "PDF_Region_Edit_Mode": {
+    "message": "영역 수정"
+  },
+  "PDF_Region_Apply": {
+    "message": "수정 적용"
+  },
+  "PDF_Region_Edit_Help": {
+    "message": "영역을 클릭해 수정하고 저장하세요. 끝나면 수정 적용을 누르세요."
+  },
+  "PDF_Region_Saved": {
+    "message": "영역 수정을 저장했습니다. 수정 적용을 누르면 번역 대상에 반영됩니다."
+  },
+  "PDF_Region_No_Translation_Targets": {
+    "message": "수정한 영역 설정에 따라 번역할 텍스트가 없습니다."
+  },
+  "PDF_Show_Docling_Regions": {
+    "message": "Docling 영역 표시"
+  },
+  "PDF_Show_Docling_Regions_Help": {
+    "message": "Docling의 원래 영역 경계와 분류를 표시합니다. 번역에서 제외된 영역도 포함합니다."
+  },
+  "PDF_Layout_Picture": {
+    "message": "그림"
+  },
+  "PDF_Analyzing_Docling": {
+    "message": "Docling으로 문서 영역을 분석하고 있습니다 (CPU)."
+  },
+  "PDF_Layout_Docling_CPU": {
+    "message": "Docling CPU"
+  },
+  "PDF_Layout_Cache_Reused": {
+    "message": "분석 캐시 사용"
+  },
+  "PDF_Layout_Cached_Offline": {
+    "message": "분석 서버 연결 없이 저장된 결과를 사용합니다."
+  },
+  "PDF_Layout_Unavailable": {
+    "message": "Docling에 연결하지 못해 기존 읽기 순서 분석을 사용합니다."
+  },
+  "PDF_Linked_Hover": {
+    "message": "원문·번역 연결 강조"
+  },
+  "PDF_Sentence_Actions": {
+    "message": "문장 재번역"
+  },
+  "PDF_Sentence_Retry_Help": {
+    "message": "우클릭하여 재번역하거나 이전 번역으로 되돌리기"
+  },
+  "PDF_Retranslate_Sentence": {
+    "message": "다시 번역"
+  },
+  "PDF_Retranslate_Reduced_Context": {
+    "message": "문맥을 줄여서 번역"
+  },
+  "PDF_Retranslate_Without_Context": {
+    "message": "문맥 없이 번역"
+  },
+  "PDF_Restore_Previous_Translation": {
+    "message": "이전 번역으로 되돌리기"
+  },
+  "PDF_Retranslating_Sentence": {
+    "message": "선택한 구간을 다시 번역하고 있습니다."
+  },
+  "PDF_Sentence_Retranslated": {
+    "message": "선택한 구간의 번역을 교체했습니다."
+  },
+  "PDF_Sentence_Retranslation_Failed": {
+    "message": "재번역에 실패했습니다. 기존 번역을 유지합니다."
+  },
+  "PDF_Previous_Translation_Restored": {
+    "message": "이전 번역으로 되돌렸습니다."
+  },
+  "PDF_Sentence_Interaction_Help": {
+    "message": "마우스를 올리면 원문 강조 · 클릭하면 원문으로 이동"
+  },
+  "PDF_Local_Endpoint_Required": {
+    "message": "PDF 번역에는 HTTP 또는 HTTPS LLM API 주소를 설정해 주세요."
+  },
+  "PDF_Local_Embedding_Error": {
+    "message": "임베딩 요청 실패. 설정한 Ollama 서버의 embeddinggemma 모델을 확인해 주세요."
+  },
+  "PDF_Embedding_Connection_Error": {
+    "message": "PDF 임베딩 서버 요청에 실패했습니다. 주소와 브라우저 연결 권한을 확인하세요."
+  },
+  "PDF_Embedding_Timeout": {
+    "message": "PDF 임베딩 서버 응답 시간이 초과되었습니다."
+  },
+  "PDF_API_Disconnected": {
+    "message": "확장 백그라운드 연결이 끊겼습니다. 확장프로그램과 PDF 탭을 새로고침한 뒤 다시 시도하세요."
+  },
+  "PDF_API_Permission": {
+    "message": "확장프로그램에 LLM 서버 접근 권한이 없습니다. 확장 상세 설정의 사이트 액세스 권한을 확인하세요."
+  },
+  "PDF_API_Config_Changed": {
+    "message": "LLM 설정이 변경되었습니다. 현재 작업을 중지하고 다시 번역해 주세요."
+  },
+  "PDF_API_Invalid_Request": {
+    "message": "PDF API 요청 형식이 올바르지 않습니다. 확장프로그램과 PDF 탭을 새로고침하세요."
+  },
+  "PDF_API_Timeout": {
+    "message": "확장 백그라운드의 서버 요청 시간이 초과되었습니다. 다시 시도하세요."
+  },
+  "PDF_Server_Access_Denied": {
+    "message": "서버가 접근을 거부했습니다 (HTTP 403). 서버의 인증·접속 허용 설정을 확인하세요."
+  },
+  "PDF_Local_Model_Required": {
+    "message": "로컬 번역 모델을 선택해 주세요."
+  },
+  "PDF_Analyzing_Reading_Order": {
+    "message": "읽기 순서 분석"
+  },
+  "PDF_Building_Document_Index": {
+    "message": "논문 전체의 검색용 임베딩을 만들고 있습니다."
+  },
+  "PDF_Document_Ready": {
+    "message": "문서 준비 완료. 페이지 번역 또는 전체 번역을 선택하세요."
+  },
+  "PDF_Scanned_OCR_Required": {
+    "message": "선택 가능한 텍스트가 없습니다. 스캔 PDF는 OCR이 필요합니다."
+  },
+  "PDF_Page_Text_Missing": {
+    "message": "페이지 텍스트를 찾을 수 없습니다."
+  },
+  "PDF_Translating_Page": {
+    "message": "페이지 번역 중"
+  },
+  "PDF_Block_Translation_Failed": {
+    "message": "문장 번역에 실패했습니다. 다시 페이지 번역을 눌러 재시도하세요."
+  },
+  "PDF_Translation_Error_Output_Limit": {
+    "message": "출력 한도에 도달해 번역을 완료하지 못했습니다."
+  },
+  "PDF_Translation_Error_Timeout": {
+    "message": "번역 응답 시간이 초과되었습니다."
+  },
+  "PDF_Translation_Error_Connection": {
+    "message": "번역 API에 연결하지 못했습니다. 서버 주소와 실행 상태를 확인하세요."
+  },
+  "PDF_Translation_Error_HTTP": {
+    "message": "번역 API 오류"
+  },
+  "PDF_Translation_Error_Empty": {
+    "message": "모델이 빈 번역 결과를 반환했습니다."
+  },
+  "PDF_Translation_Error_Invalid_Response": {
+    "message": "번역 API의 응답 형식이 올바르지 않습니다."
+  },
+  "PDF_Translation_Error_Configuration": {
+    "message": "사용할 모델과 API 주소를 확인하세요."
+  },
+  "PDF_Translation_Error_Content_Filter": {
+    "message": "모델의 콘텐츠 필터로 번역 결과가 제공되지 않았습니다."
+  },
+  "PDF_Translation_Context_Reduced": {
+    "message": "출력 실패 후 주변 문맥 없이 다시 번역했습니다."
+  },
+  "PDF_Source_Location_Unavailable": {
+    "message": "이 문장의 정확한 원문 위치를 찾지 못했습니다."
+  },
+  "PDF_Translation_Paused": {
+    "message": "중지했습니다. 완료된 문장은 저장되어 다음 실행에서 재사용됩니다."
+  },
+  "PDF_Page_OCR_Required": {
+    "message": "이 페이지에 선택 가능한 텍스트가 없습니다. OCR이 필요할 수 있습니다."
+  },
+  "PDF_Retry_Failed_Blocks": {
+    "message": "실패한 문장은 페이지 번역을 다시 눌러 재시도할 수 있습니다."
+  },
+  "PDF_Page_Translation_Complete": {
+    "message": "페이지 번역 완료"
+  },
+  "PDF_Text_OCR_Required": {
+    "message": "선택 가능한 텍스트가 없습니다. OCR이 필요합니다."
+  },
+  "PDF_Document_Translation_Complete": {
+    "message": "문서의 텍스트 번역 완료"
+  },
+  "PDF_Translation": {
+    "message": "PDF 번역"
+  },
+  "PDF_Translation_Close": {
+    "message": "번역 패널 닫기"
+  },
+  "PDF_Translation_Settings": {
+    "message": "설정"
+  },
+  "PDF_Translation_Resize": {
+    "message": "번역 패널 크기 조절 (화살표 키)"
+  },
+  "PDF_Translate_Page": {
+    "message": "이 페이지 번역"
+  },
+  "PDF_Translate_All": {
+    "message": "전체 번역"
+  },
+  "PDF_Translation_Stop": {
+    "message": "중지"
+  },
+  "PDF_Reading_Order": {
+    "message": "읽기 순서"
+  },
+  "PDF_Layout_Auto": {
+    "message": "자동"
+  },
+  "PDF_Layout_Single": {
+    "message": "한 단"
+  },
+  "PDF_Layout_Two": {
+    "message": "두 단"
+  },
+  "PDF_Translation_Idle": {
+    "message": "현재 페이지를 번역하거나 전체 번역을 시작하세요."
+  },
+  "PDF_Translation_Page": {
+    "message": "페이지"
+  },
+  "PDF_Translation_Source": {
+    "message": "원문 위치"
+  },
+  "PDF_Translation_Formula": {
+    "message": "수식"
+  },
+  "PDF_Translation_Table": {
+    "message": "표"
+  },
+  "PDF_Translation_Heading": {
+    "message": "제목"
+  },
+  "PDF_Translation_Sentence": {
+    "message": "문장"
+  },
+  "PDF_Translation_Caption": {
+    "message": "설명"
+  },
+  "PDF_Translation_Paragraph": {
+    "message": "문단"
+  },
+  "PDF_Translation_Error": {
+    "message": "문장을 번역하지 못했습니다. 이 페이지 번역을 눌러 다시 시도하세요."
+  },
+  "PDF_Translation_Running": {
+    "message": "번역 중…"
+  },
+  "PDF_Translation_Pending": {
+    "message": "번역 대기 중"
+  },
+  "PDF_Translation_No_Text": {
+    "message": "번역할 텍스트가 없습니다. 스캔 PDF에는 OCR이 필요합니다."
+  },
+  "PDF_Translation_Index": {
+    "message": "문맥 준비"
+  },
+  "PDF_Translation_Progress": {
+    "message": "번역"
+  },
+  "PDF_Viewer": {
+    "message": "PDF 뷰어"
+  }
+}

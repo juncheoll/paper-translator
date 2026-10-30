@@ -1,0 +1,23 @@
+[Unit]
+Description=Paper Translator CPU document layout API
+After=network.target
+
+[Service]
+Type=simple
+User=papertranslator
+Group=papertranslator
+WorkingDirectory=/opt/papertranslator
+EnvironmentFile=/etc/papertranslator/docling.env
+ExecStart=/opt/papertranslator/venv/bin/python /opt/papertranslator/tools/docling_service.py --port 8876 --artifacts /var/lib/papertranslator/models --cache /var/lib/papertranslator/cache --require-token --warmup
+Restart=on-failure
+RestartSec=5
+TimeoutStartSec=180
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/papertranslator
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

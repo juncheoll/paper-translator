@@ -1,0 +1,5 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Paper Translator</title><link rel="stylesheet" href="popup.css"><script defer src="popup.js"></script></head><body>
+<header><span class="mark">P<span>↗</span></span><div><h1>Paper Translator</h1><p>논문의 흐름을 그대로.</p></div></header>
+<main><button id="current" class="primary">현재 PDF 번역하기 <span>↗</span></button><button id="file">PDF 파일 열기</button>
+<form id="urlForm"><label for="url">PDF 주소</label><div class="url"><input id="url" type="url" placeholder="https://arxiv.org/pdf/…" required><button aria-label="주소 열기">→</button></div></form><p id="error" role="alert" hidden></p></main>
+<footer><button id="settings">실행 설정</button><button id="help">사용 안내</button></footer></body></html>

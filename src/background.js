@@ -1,0 +1,11 @@
+import browser from 'webextension-polyfill';
+import { registerBrowserAiBroker } from './browser_ai/broker_core.js';
+import { registerPdfApiBroker } from './pdf/api_broker.js';
+import { registerDoclingHelperBroker } from './docling_helper/broker.js';
+import { registerDoclingApiBroker } from './services/docling_broker.js';
+import { registerPdfNavigation } from './pdf_navigation.js';
+registerBrowserAiBroker();
+registerPdfApiBroker();
+registerDoclingHelperBroker();
+registerDoclingApiBroker();
+registerPdfNavigation(browser);

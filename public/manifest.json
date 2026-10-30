@@ -1,0 +1,59 @@
+{
+  "manifest_version": 3,
+  "minimum_chrome_version": "116",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqP/6GGfzfDL55nM5dHLrJmbtiYOQsO6gFNAIviaxTJnVKL50lyGSFf5THjtb8EThR7abml6VWavuBH0o2G6qTQJRJpm/DRXddvbOIlE61Zngpgm1ERhAMu9V4TADht8WNGopdavkPkwY8JRXSq76EFcyNJXeuQRsKHFL3y5qkUMjbH40XhedEMH59g6zVc1N5jZpLcxPo+s1Lg9rSv9Vfve6hJC5dt6hcd3kZrBVb6wQoolfzAJTxwlD0RqV/n8Wcn2tG0FiJoXgWL+wpn5Vqu0KrbDtGE805QboBF+Fie1TfRVBSLvRsTvebXUb/96BhiRnNcnjl4ugWUrOYSnflQIDAQAB",
+  "version": "0.1.0",
+  "name": "Paper Translator",
+  "description": "PDF 논문을 문맥과 함께 번역합니다. 번역·임베딩·레이아웃 분석의 실행 위치를 각각 선택하세요.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "tabs",
+    "offscreen",
+    "nativeMessaging"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Paper Translator",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "options_ui": {
+    "page": "settings.html",
+    "open_in_tab": true
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; worker-src 'self'; object-src 'none'"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "pdf_open.js"
+      ],
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "file:///*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "default_locale": "en",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "32": "icons/icon-32.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

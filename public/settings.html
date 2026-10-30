@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>설정 · Paper Translator</title>
+  <link rel="stylesheet" href="settings.css">
+  <script src="settings.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="popup.html" aria-label="Paper Translator 홈"><span class="brand-symbol" aria-hidden="true">P<span>↗</span></span><span>Paper Translator<small>논문에 집중하는 번역</small></span></a>
+    <a class="text-link" href="help.html" target="_blank" rel="noopener">사용 안내 <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <section class="intro">
+      <div><p class="eyebrow">YOUR READING WORKSPACE</p><h1>실행할 곳은, 직접 선택하세요.</h1><p class="intro-copy">번역, 문맥 검색, 문서 분석을 각각 내 기기 또는 서버에 맡길 수 있습니다.</p></div>
+      <div class="intro-note"><span class="dot"></span>설정과 API 키는 이 브라우저에만 저장됩니다.</div>
+    </section>
+    <form id="settings-form" novalidate>
+      <div class="services">
+        <section class="service-card" data-service="translation" aria-labelledby="translation-title">
+          <div class="card-heading"><div class="step">01</div><div><p class="eyebrow">TRANSLATION</p><h2 id="translation-title">번역</h2></div><span class="service-badge" data-badge="translation">API</span></div>
+          <p class="card-copy">문맥을 참고해 문장과 제목을 번역합니다.</p>
+          <label>실행 위치<select name="llmExecution"><option value="api">API · 서버 또는 로컬 Ollama</option><option value="browser">이 브라우저 · wllama</option></select></label>
+          <div data-show="llmExecution:api" class="field-stack">
+            <label>API 주소<input name="llmApiEndpoint" type="url" placeholder="http://localhost:11434/v1" spellcheck="false" autocomplete="off"></label>
+            <p class="field-note">Ollama 또는 OpenAI 호환 API의 기본 주소입니다. 보통 <code>/v1</code>로 끝납니다.</p>
+            <label>모델<input name="llmModel" spellcheck="false" autocomplete="off"></label>
+            <label>API 키 <span class="optional">선택</span><input name="llmApiKey" type="password" autocomplete="new-password" placeholder="인증이 없다면 비워두세요"></label>
+            <button type="button" class="button secondary" data-action="check-translation">저장하고 연결 확인</button>
+          </div>
+          <div data-show="llmExecution:browser" hidden class="browser-model">
+            <strong>Hy-MT2 1.8B Q8</strong><p>약 1.91 GB · 처음 한 번 다운로드합니다.</p>
+            <div class="button-row"><button type="button" class="button primary" data-action="prepare-translation">다운로드·준비</button><button type="button" class="button secondary" data-action="status-translation">상태 확인</button></div>
+            <div class="button-row"><button type="button" class="button quiet" data-action="unload-translation">메모리 해제</button><button type="button" class="button quiet" data-action="delete-translation">모델 삭제</button></div>
+          </div>
+          <div class="operation-state"><p data-status="translation" role="status" aria-live="polite">연결을 확인하거나 모델을 준비하세요.</p><progress data-progress="translation" hidden max="1" value="0"></progress><button type="button" class="cancel-button" data-cancel="translation" hidden>작업 취소</button></div>
+        </section>
+
+        <section class="service-card" data-service="embedding" aria-labelledby="embedding-title">
+          <div class="card-heading"><div class="step">02</div><div><p class="eyebrow">CONTEXT SEARCH</p><h2 id="embedding-title">RAG 임베딩</h2></div><span class="service-badge" data-badge="embedding">API</span></div>
+          <p class="card-copy">논문에서 번역에 도움이 될 문맥을 찾습니다.</p>
+          <label>실행 위치<select name="embeddingExecution"><option value="api">API · 서버 또는 로컬 Ollama</option><option value="browser">이 브라우저 · wllama</option></select></label>
+          <div data-show="embeddingExecution:api" class="field-stack">
+            <label>API 형식<select name="embeddingApiType"><option value="ollama">Ollama · /api/embed</option><option value="openai">OpenAI 호환 · /embeddings</option></select></label>
+            <label>API 주소<input name="embeddingApiEndpoint" type="url" placeholder="http://localhost:11434" spellcheck="false" autocomplete="off"></label>
+            <p class="field-note">번역 서버와 다른 주소를 지정할 수 있습니다. OpenAI 호환 API는 보통 <code>/v1</code>까지 입력합니다.</p>
+            <label>모델<input name="embeddingModel" spellcheck="false" autocomplete="off"></label>
+            <label>API 키 <span class="optional">선택</span><input name="embeddingApiKey" type="password" autocomplete="new-password" placeholder="인증이 없다면 비워두세요"></label>
+            <button type="button" class="button secondary" data-action="check-embedding">저장하고 연결 확인</button>
+          </div>
+          <div data-show="embeddingExecution:browser" hidden class="browser-model">
+            <strong>EmbeddingGemma 300M Q8</strong><p>약 334 MB · 처음 한 번 다운로드합니다.</p>
+            <div class="button-row"><button type="button" class="button primary" data-action="prepare-embedding">다운로드·준비</button><button type="button" class="button secondary" data-action="status-embedding">상태 확인</button></div>
+            <div class="button-row"><button type="button" class="button quiet" data-action="unload-embedding">메모리 해제</button><button type="button" class="button quiet" data-action="delete-embedding">모델 삭제</button></div>
+          </div>
+          <div class="operation-state"><p data-status="embedding" role="status" aria-live="polite">문서와 검색어에는 같은 임베딩 모델을 사용합니다.</p><progress data-progress="embedding" hidden max="1" value="0"></progress><button type="button" class="cancel-button" data-cancel="embedding" hidden>작업 취소</button></div>
+        </section>
+
+        <section class="service-card docling-card" data-service="docling" aria-labelledby="docling-title">
+          <div class="card-heading"><div class="step">03</div><div><p class="eyebrow">DOCUMENT LAYOUT</p><h2 id="docling-title">Docling</h2></div><span class="service-badge" data-badge="docling">내 기기</span></div>
+          <p class="card-copy">본문·제목·캡션·그림·수식 영역을 구분합니다. 분석 결과는 저장해 다시 사용합니다.</p>
+          <label>실행 위치<select name="doclingExecution"><option value="local">이 기기 · CPU 도우미</option><option value="server">서버 · Docling API</option></select></label>
+          <div data-show="doclingExecution:local" class="docling-local">
+            <div><label class="checkbox"><input type="checkbox" name="pdfDoclingAutoStart"><span>PDF를 열 때 도우미 자동 시작</span></label><p class="field-note">도우미는 한 번 설치해야 합니다. 준비할 때 모델을 내려받고, 이후에는 저장된 모델로 시작합니다.</p><a class="text-link" href="help.html#docling" target="_blank" rel="noopener">도우미 설치 안내 ↗</a></div>
+            <div><div class="button-row"><button type="button" class="button primary" data-action="prepare-docling">분석 준비</button><button type="button" class="button secondary" data-action="start-docling">시작</button></div><div class="button-row"><button type="button" class="button secondary" data-action="status-docling">상태 확인</button><button type="button" class="button quiet" data-action="stop-docling">중지·메모리 해제</button></div></div>
+          </div>
+          <div data-show="doclingExecution:server" hidden class="field-stack">
+            <label>API 주소<input name="doclingApiEndpoint" type="url" placeholder="https://docling.example.org" spellcheck="false" autocomplete="off"></label>
+            <label>API 키 <span class="optional">선택</span><input name="doclingApiKey" type="password" autocomplete="new-password" placeholder="인증이 없다면 비워두세요"></label>
+            <p class="field-note">Paper Translator의 Docling 분석 API가 필요합니다. 서버 모드에서는 로컬 도우미를 시작하지 않습니다.</p>
+            <button type="button" class="button secondary" data-action="check-docling">저장하고 연결 확인</button>
+          </div>
+          <div class="operation-state"><p data-status="docling" role="status" aria-live="polite">로컬 도우미 또는 분석 서버를 선택하세요.</p><progress data-progress="docling" hidden max="1" value="0"></progress><button type="button" class="cancel-button" data-cancel="docling" hidden>작업 취소</button></div>
+        </section>
+      </div>
+
+      <section class="preferences" aria-labelledby="preferences-title">
+        <div class="section-heading"><h2 id="preferences-title">읽기 환경</h2><p>논문의 흐름과 원문 연결을 유지합니다.</p></div>
+        <div class="preference-grid"><label>번역 언어<select name="translateTarget"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option></select></label><label>패널 표시 언어<select name="uiLanguage"><option value="ko">한국어</option><option value="en">English</option><option value="auto">브라우저 언어</option></select></label></div>
+        <div class="checkbox-grid"><label class="checkbox"><input type="checkbox" name="pdfAutoOpen"><span>웹 PDF를 전용 뷰어로 열기</span></label><label class="checkbox"><input type="checkbox" name="pdfLinkedHover"><span>원문과 번역의 마우스오버 연결</span></label><label class="checkbox"><input type="checkbox" name="pdfSourceVariableTooltip"><span>원문 변수에 설명 툴팁 표시</span></label><label class="checkbox"><input type="checkbox" name="pdfShowDoclingRegions"><span>Docling 영역 경계 표시</span></label></div>
+        <details class="context-details"><summary>번역에 참고할 문맥 범위 <span>글자 수</span></summary><div class="context-grid"><label>문서 제목<input type="number" name="llmContextTitleLimit" min="0" max="12000" step="1"></label><label>섹션 제목<input type="number" name="llmContextHeadingLimit" min="0" max="12000" step="1"></label><label>해당 문단<input type="number" name="llmContextParagraphLimit" min="0" max="12000" step="1"></label><label>이전 문단<input type="number" name="llmContextBeforeLimit" min="0" max="12000" step="1"></label><label>다음 문단<input type="number" name="llmContextAfterLimit" min="0" max="12000" step="1"></label><label>전체 문맥 상한<input type="number" name="llmContextTotalLimit" min="0" max="12000" step="1"></label></div><p class="field-note">각 항목의 최대 글자 수입니다. 전체 문맥 상한은 합쳐진 참고 문맥에 적용하며, 모델 입력 한도에 따라 더 줄어들 수 있습니다.</p></details>
+      </section>
+
+      <aside class="privacy-note"><span aria-hidden="true">↗</span><p><strong>서버에 전달되는 내용</strong> 번역 서버에는 해당 문장과 참고 문맥, 임베딩 서버에는 논문 텍스트 청크가 전달됩니다. 원격 Docling에는 PDF 전체를 보냅니다. 브라우저 모델은 내 기기에서 실행하며, 번역·임베딩 모델은 한 번에 하나만 메모리에 유지합니다.</p></aside>
+      <div class="save-bar"><p id="save-status" role="status" aria-live="polite">설정을 불러오고 있습니다.</p><button type="submit" class="button primary" id="save-button">변경사항 저장</button></div>
+    </form>
+  </main>
+  <footer>Paper Translator · PDF 논문을 위한 독립 실행 설정</footer>
+</body>
+</html>

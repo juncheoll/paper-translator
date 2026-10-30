@@ -1,0 +1,512 @@
+{
+  "LLM_Execution_API": {
+    "message": "API (Ollama / server)"
+  },
+  "LLM_Execution_Browser": {
+    "message": "In browser (WebGPU)"
+  },
+  "Docling_Helper_Title": {
+    "message": "PDF layout (Docling CPU)"
+  },
+  "Docling_Helper_Help": {
+    "message": "Install the companion once, then prepare its model here. PDF analysis runs on this computer. Starting it uses downloaded models only."
+  },
+  "Docling_Helper_Auto_Start": {
+    "message": "Start Docling automatically when opening a PDF"
+  },
+  "Docling_Helper_Keep_Open": {
+    "message": "Keep settings open in a tab while preparing. Closing the popup cancels its request. Disable automatic start if you want it to remain stopped."
+  },
+  "Docling_Helper_Install_Guide": {
+    "message": "Helper installation guide"
+  },
+  "Docling_Helper_Prepare": {
+    "message": "Prepare PDF analysis"
+  },
+  "Docling_Helper_Start": {
+    "message": "Start"
+  },
+  "Docling_Helper_Refresh": {
+    "message": "Refresh status"
+  },
+  "Docling_Helper_Stop": {
+    "message": "Stop / release memory"
+  },
+  "Docling_Helper_Cancel": {
+    "message": "Cancel preparation"
+  },
+  "Docling_Helper_Not_Checked": {
+    "message": "Helper status has not been checked."
+  },
+  "Docling_Helper_Not_Installed": {
+    "message": "Install the Docling helper once, then refresh its status."
+  },
+  "Docling_Helper_Model_Missing": {
+    "message": "The helper is installed. Prepare PDF analysis to download its model."
+  },
+  "Docling_Helper_Cached": {
+    "message": "Model downloaded; the analysis service is stopped."
+  },
+  "Docling_Helper_Running": {
+    "message": "Analysis service running; the model loads when needed."
+  },
+  "Docling_Helper_Loaded": {
+    "message": "CPU analysis ready in memory."
+  },
+  "Docling_Helper_External": {
+    "message": "An existing Docling service is connected."
+  },
+  "Docling_Helper_External_Help": {
+    "message": "This service was started outside the helper. Stop it using its original launcher; this helper will not terminate it."
+  },
+  "Docling_Helper_Busy": {
+    "message": "The Docling helper is working."
+  },
+  "Docling_Helper_Downloading": {
+    "message": "Downloading the layout model"
+  },
+  "Docling_Helper_Starting": {
+    "message": "Starting Docling"
+  },
+  "Docling_Helper_Loading": {
+    "message": "Loading the layout model on CPU"
+  },
+  "Docling_Helper_Disconnected": {
+    "message": "The helper connection closed. Refresh status or reinstall it for this extension."
+  },
+  "Docling_Helper_Timeout": {
+    "message": "The helper did not respond in time. Check its status and retry."
+  },
+  "Docling_Helper_Forbidden": {
+    "message": "This extension is not allowed by the installed helper. Reinstall the helper for the current extension ID."
+  },
+  "Docling_Helper_Failed": {
+    "message": "Docling helper operation failed."
+  },
+  "Browser_AI_Models": {
+    "message": "Browser models"
+  },
+  "Browser_AI_Help": {
+    "message": "Models download only when you select Prepare. Translation and RAG run on this device; Docling keeps its current connection."
+  },
+  "Browser_AI_Translation": {
+    "message": "Translation model"
+  },
+  "Browser_AI_Embedding": {
+    "message": "RAG embedding model"
+  },
+  "Browser_AI_Prepare": {
+    "message": "Download / prepare"
+  },
+  "Browser_AI_Refresh": {
+    "message": "Refresh status"
+  },
+  "Browser_AI_Stop": {
+    "message": "Stop"
+  },
+  "Browser_AI_Unload": {
+    "message": "Release model memory"
+  },
+  "Browser_AI_Delete_Cache": {
+    "message": "Delete cached model"
+  },
+  "Browser_AI_Not_Downloaded": {
+    "message": "Not downloaded"
+  },
+  "Browser_AI_Status_Unknown": {
+    "message": "Status not checked"
+  },
+  "Browser_AI_Cached": {
+    "message": "Downloaded"
+  },
+  "Browser_AI_Loaded": {
+    "message": "Ready in memory"
+  },
+  "Browser_AI_Downloading": {
+    "message": "Downloading model"
+  },
+  "Browser_AI_Loading": {
+    "message": "Loading model"
+  },
+  "Browser_AI_Generating": {
+    "message": "Translating"
+  },
+  "Browser_AI_Embedding_Running": {
+    "message": "Creating embeddings"
+  },
+  "Browser_AI_GPU_Unavailable": {
+    "message": "WebGPU is unavailable. Enable hardware acceleration or choose API execution."
+  },
+  "Browser_AI_Status_Failed": {
+    "message": "Could not read browser model status."
+  },
+  "Browser_AI_Model_Error": {
+    "message": "Browser model operation failed."
+  },
+  "Browser_AI_Busy": {
+    "message": "A browser model is in use."
+  },
+  "Browser_AI_Cancelled": {
+    "message": "Stopped. Downloaded model files remain cached."
+  },
+  "Browser_AI_Prepare_Required": {
+    "message": "Prepare the selected browser model in settings first."
+  },
+  "Browser_AI_Open_Settings_Tab": {
+    "message": "Open settings in a tab"
+  },
+  "Browser_AI_Keep_Open_Help": {
+    "message": "Keep this page open during downloads. Closing the toolbar popup stops its download, so preparing models in a tab is recommended."
+  },
+  "PDF_Translation_Error_Math": {
+    "message": "Translation changed or omitted math symbols. Retry this sentence."
+  },
+  "PDF_Source_Variable_Tooltip": {
+    "message": "Original PDF variable explanations"
+  },
+  "PDF_Variable_Evidence": {
+    "message": "Supporting explanation from the paper"
+  },
+  "PDF_Variable_Not_Found": {
+    "message": "No explanation for this variable was found in the body text."
+  },
+  "PDF_Variable_View_Source": {
+    "message": "View explanation in source"
+  },
+  "PDF_Variable_Explain": {
+    "message": "Find explanation in the paper"
+  },
+  "PDF_Visual_Loading": {
+    "message": "Loading original region…"
+  },
+  "PDF_Visual_Formula": {
+    "message": "Original formula"
+  },
+  "PDF_Visual_Table": {
+    "message": "Original table"
+  },
+  "PDF_Visual_Failed": {
+    "message": "Could not load the original region."
+  },
+  "PDF_Visual_Retry": {
+    "message": "Reload region"
+  },
+  "PDF_Visual_Variable_Help": {
+    "message": "Hover a variable to see supporting explanations from the paper."
+  },
+  "PDF_Region_Geometry": {
+    "message": "Edit boundaries / split"
+  },
+  "PDF_Region_Geometry_Help": {
+    "message": "Drag the handles and split line. After saving, classify each region separately. Arrow keys adjust precisely."
+  },
+  "PDF_Region_Resize_Handle": {
+    "message": "Resize boundary handle"
+  },
+  "PDF_Region_Split_Line": {
+    "message": "Split line"
+  },
+  "PDF_Region_Split": {
+    "message": "Split region"
+  },
+  "PDF_Region_No_Split": {
+    "message": "Do not split"
+  },
+  "PDF_Region_Split_Horizontal": {
+    "message": "Split top / bottom"
+  },
+  "PDF_Region_Split_Vertical": {
+    "message": "Split left / right"
+  },
+  "PDF_Region_Reset_Geometry": {
+    "message": "Restore original region"
+  },
+  "PDF_Region_Restore_Geometry_Help": {
+    "message": "Restoring also removes all splits and corrections of the original region."
+  },
+  "PDF_Region_Edit_Title": {
+    "message": "Edit region classification"
+  },
+  "PDF_Region_Classification": {
+    "message": "Classification / translation target"
+  },
+  "PDF_Region_Exclude": {
+    "message": "Exclude from translation"
+  },
+  "PDF_Region_Reset": {
+    "message": "Restore automatic classification"
+  },
+  "PDF_Region_Cancel": {
+    "message": "Cancel"
+  },
+  "PDF_Region_Save": {
+    "message": "Save"
+  },
+  "PDF_Region_Save_Failed": {
+    "message": "Could not save this correction. Existing corrections are unchanged."
+  },
+  "PDF_Region_Manual": {
+    "message": "Edited"
+  },
+  "PDF_Region_Excluded": {
+    "message": "Excluded"
+  },
+  "PDF_Region_Edit_Mode": {
+    "message": "Edit regions"
+  },
+  "PDF_Region_Apply": {
+    "message": "Apply corrections"
+  },
+  "PDF_Region_Edit_Help": {
+    "message": "Click a region to correct and save it. Select Apply corrections when finished."
+  },
+  "PDF_Region_Saved": {
+    "message": "Correction saved. Select Apply corrections to update translation targets."
+  },
+  "PDF_Region_No_Translation_Targets": {
+    "message": "No translation targets remain with the current region corrections."
+  },
+  "PDF_Show_Docling_Regions": {
+    "message": "Show Docling regions"
+  },
+  "PDF_Show_Docling_Regions_Help": {
+    "message": "Show Docling's original region boundaries and labels, including regions excluded from translation."
+  },
+  "PDF_Layout_Picture": {
+    "message": "Picture"
+  },
+  "PDF_Analyzing_Docling": {
+    "message": "Analyzing document regions with Docling (CPU)."
+  },
+  "PDF_Layout_Docling_CPU": {
+    "message": "Docling CPU"
+  },
+  "PDF_Layout_Cache_Reused": {
+    "message": "Layout cache reused"
+  },
+  "PDF_Layout_Cached_Offline": {
+    "message": "Using saved layout without the analysis server."
+  },
+  "PDF_Layout_Unavailable": {
+    "message": "Docling is unavailable; using native reading-order analysis."
+  },
+  "PDF_Linked_Hover": {
+    "message": "Link source and translation on hover"
+  },
+  "PDF_Sentence_Actions": {
+    "message": "Sentence translation actions"
+  },
+  "PDF_Sentence_Retry_Help": {
+    "message": "Right-click to retranslate or restore the previous translation."
+  },
+  "PDF_Retranslate_Sentence": {
+    "message": "Translate again"
+  },
+  "PDF_Retranslate_Reduced_Context": {
+    "message": "Translate with less context"
+  },
+  "PDF_Retranslate_Without_Context": {
+    "message": "Translate without context"
+  },
+  "PDF_Restore_Previous_Translation": {
+    "message": "Restore previous translation"
+  },
+  "PDF_Retranslating_Sentence": {
+    "message": "Retranslating the selected text."
+  },
+  "PDF_Sentence_Retranslated": {
+    "message": "Replaced the selected text's translation."
+  },
+  "PDF_Sentence_Retranslation_Failed": {
+    "message": "Retranslation failed. The existing translation is unchanged."
+  },
+  "PDF_Previous_Translation_Restored": {
+    "message": "Restored the previous translation."
+  },
+  "PDF_Sentence_Interaction_Help": {
+    "message": "Hover to highlight the source; click to go to it."
+  },
+  "PDF_Local_Endpoint_Required": {
+    "message": "Set an HTTP or HTTPS LLM API endpoint for PDF translation."
+  },
+  "PDF_Local_Embedding_Error": {
+    "message": "Embedding request failed. Check the embeddinggemma model on the configured Ollama server."
+  },
+  "PDF_Embedding_Connection_Error": {
+    "message": "The PDF embedding server request failed. Check the address and browser connection permissions."
+  },
+  "PDF_Embedding_Timeout": {
+    "message": "The PDF embedding server request timed out."
+  },
+  "PDF_API_Disconnected": {
+    "message": "The extension background connection closed. Reload the extension and PDF tab, then retry."
+  },
+  "PDF_API_Permission": {
+    "message": "The extension cannot access the LLM server. Check site access in the extension details."
+  },
+  "PDF_API_Config_Changed": {
+    "message": "LLM settings changed. Stop the current operation and translate again."
+  },
+  "PDF_API_Invalid_Request": {
+    "message": "The PDF API request is invalid. Reload the extension and PDF tab."
+  },
+  "PDF_API_Timeout": {
+    "message": "The background server request timed out. Retry the operation."
+  },
+  "PDF_Server_Access_Denied": {
+    "message": "The server denied access (HTTP 403). Check its authentication and access settings."
+  },
+  "PDF_Local_Model_Required": {
+    "message": "PDF: Local Model Required"
+  },
+  "PDF_Analyzing_Reading_Order": {
+    "message": "PDF: Analyzing Reading Order"
+  },
+  "PDF_Building_Document_Index": {
+    "message": "PDF: Building Document Index"
+  },
+  "PDF_Document_Ready": {
+    "message": "PDF: Document Ready"
+  },
+  "PDF_Scanned_OCR_Required": {
+    "message": "PDF: Scanned OCR Required"
+  },
+  "PDF_Page_Text_Missing": {
+    "message": "PDF: Page Text Missing"
+  },
+  "PDF_Translating_Page": {
+    "message": "PDF: Translating Page"
+  },
+  "PDF_Block_Translation_Failed": {
+    "message": "Sentence translation failed. Select Translate this page to retry."
+  },
+  "PDF_Translation_Error_Output_Limit": {
+    "message": "The model reached its output limit before completing this translation."
+  },
+  "PDF_Translation_Error_Timeout": {
+    "message": "The translation request timed out."
+  },
+  "PDF_Translation_Error_Connection": {
+    "message": "Could not connect to the translation API. Check its address and server status."
+  },
+  "PDF_Translation_Error_HTTP": {
+    "message": "Translation API error"
+  },
+  "PDF_Translation_Error_Empty": {
+    "message": "The model returned an empty translation."
+  },
+  "PDF_Translation_Error_Invalid_Response": {
+    "message": "The translation API returned an invalid response."
+  },
+  "PDF_Translation_Error_Configuration": {
+    "message": "Check the selected model and API address."
+  },
+  "PDF_Translation_Error_Content_Filter": {
+    "message": "The model did not provide a translation because of its content filter."
+  },
+  "PDF_Translation_Context_Reduced": {
+    "message": "Retried without reference context after an output failure."
+  },
+  "PDF_Source_Location_Unavailable": {
+    "message": "The exact source location of this sentence could not be found."
+  },
+  "PDF_Translation_Paused": {
+    "message": "Stopped. Completed sentences are cached and reused on the next run."
+  },
+  "PDF_Page_OCR_Required": {
+    "message": "PDF: Page OCR Required"
+  },
+  "PDF_Retry_Failed_Blocks": {
+    "message": "Select Translate this page to retry failed sentences."
+  },
+  "PDF_Page_Translation_Complete": {
+    "message": "PDF: Page Translation Complete"
+  },
+  "PDF_Text_OCR_Required": {
+    "message": "PDF: Text OCR Required"
+  },
+  "PDF_Document_Translation_Complete": {
+    "message": "PDF: Document Translation Complete"
+  },
+  "PDF_Translation": {
+    "message": "PDF translation"
+  },
+  "PDF_Translation_Close": {
+    "message": "Close translation panel"
+  },
+  "PDF_Translation_Settings": {
+    "message": "Settings"
+  },
+  "PDF_Translation_Resize": {
+    "message": "Resize translation panel (arrow keys)"
+  },
+  "PDF_Translate_Page": {
+    "message": "Translate this page"
+  },
+  "PDF_Translate_All": {
+    "message": "Translate all pages"
+  },
+  "PDF_Translation_Stop": {
+    "message": "Stop"
+  },
+  "PDF_Reading_Order": {
+    "message": "Reading order"
+  },
+  "PDF_Layout_Auto": {
+    "message": "Automatic"
+  },
+  "PDF_Layout_Single": {
+    "message": "Single column"
+  },
+  "PDF_Layout_Two": {
+    "message": "Two columns"
+  },
+  "PDF_Translation_Idle": {
+    "message": "Translate the current page or start translating the document."
+  },
+  "PDF_Translation_Page": {
+    "message": "page"
+  },
+  "PDF_Translation_Source": {
+    "message": "Source location"
+  },
+  "PDF_Translation_Formula": {
+    "message": "Formula"
+  },
+  "PDF_Translation_Table": {
+    "message": "Table"
+  },
+  "PDF_Translation_Heading": {
+    "message": "Heading"
+  },
+  "PDF_Translation_Sentence": {
+    "message": "Sentence"
+  },
+  "PDF_Translation_Caption": {
+    "message": "Caption"
+  },
+  "PDF_Translation_Paragraph": {
+    "message": "Paragraph"
+  },
+  "PDF_Translation_Error": {
+    "message": "Sentence translation failed. Select Translate this page to retry."
+  },
+  "PDF_Translation_Running": {
+    "message": "Translating…"
+  },
+  "PDF_Translation_Pending": {
+    "message": "Waiting for translation"
+  },
+  "PDF_Translation_No_Text": {
+    "message": "No text to translate. Scanned PDFs require OCR."
+  },
+  "PDF_Translation_Index": {
+    "message": "Indexing"
+  },
+  "PDF_Translation_Progress": {
+    "message": "Translation"
+  },
+  "PDF_Viewer": {
+    "message": "PDF Viewer"
+  }
+}
