@@ -1,6 +1,6 @@
 {
   "name": "paper-translator",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Context-aware PDF paper translation with independent browser and server backends",
   "scripts": {

@@ -6,9 +6,9 @@ MouseTooltipTranslator에서 개발·검증한 PDF 처리 로직을 이관하고
 
 ## 베타 다운로드
 
-[v0.1.0-beta.1 설치 ZIP 다운로드](https://github.com/juncheoll/paper-translator/releases/download/v0.1.0-beta.1/paper-translator-v0.1.0-beta.1.zip) · [릴리스 안내](https://github.com/juncheoll/paper-translator/releases/tag/v0.1.0-beta.1)
+[v0.1.1-beta.1 설치 ZIP 다운로드](https://github.com/juncheoll/paper-translator/releases/download/v0.1.1-beta.1/paper-translator-v0.1.1-beta.1.zip) · [릴리스 안내](https://github.com/juncheoll/paper-translator/releases/tag/v0.1.1-beta.1)
 
-**Releases에 첨부된 `paper-translator-v0.1.0-beta.1.zip`을 받으세요.** GitHub가 자동으로 제공하는 `Source code.zip`은 개발용 소스이며 바로 설치하는 확장 ZIP이 아닙니다. 설치 ZIP에는 `extension/`, Docling 도우미·서버용 `tools/`, 사용 문서가 함께 들어 있습니다.
+**Releases에 첨부된 `paper-translator-v0.1.1-beta.1.zip`을 받으세요.** GitHub가 자동으로 제공하는 `Source code.zip`은 개발용 소스이며 바로 설치하는 확장 ZIP이 아닙니다. 설치 ZIP에는 `extension/`, Docling 도우미·서버용 `tools/`, 사용 문서가 함께 들어 있습니다.
 
 이 릴리스는 연구실 동료들과 새 PC 설치·실제 논문 사용을 확인하는 베타입니다. 새 PC 최초 설치, 실제 Chrome의 브라우저 WebGPU 전체 경로, Windows/Linux 도우미 설치는 추가 검증이 필요합니다. 오류를 보고할 때 운영체제·Chrome 버전·실행 위치와 오류 문구를 적고 API 키나 비공개 논문 원문은 제외하세요.
 

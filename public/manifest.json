@@ -2,7 +2,8 @@
   "manifest_version": 3,
   "minimum_chrome_version": "116",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqP/6GGfzfDL55nM5dHLrJmbtiYOQsO6gFNAIviaxTJnVKL50lyGSFf5THjtb8EThR7abml6VWavuBH0o2G6qTQJRJpm/DRXddvbOIlE61Zngpgm1ERhAMu9V4TADht8WNGopdavkPkwY8JRXSq76EFcyNJXeuQRsKHFL3y5qkUMjbH40XhedEMH59g6zVc1N5jZpLcxPo+s1Lg9rSv9Vfve6hJC5dt6hcd3kZrBVb6wQoolfzAJTxwlD0RqV/n8Wcn2tG0FiJoXgWL+wpn5Vqu0KrbDtGE805QboBF+Fie1TfRVBSLvRsTvebXUb/96BhiRnNcnjl4ugWUrOYSnflQIDAQAB",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "version_name": "0.1.1-beta.1",
   "name": "Paper Translator",
   "description": "PDF 논문을 문맥과 함께 번역합니다. 번역·임베딩·레이아웃 분석의 실행 위치를 각각 선택하세요.",
   "permissions": [
