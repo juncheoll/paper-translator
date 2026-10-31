@@ -326,21 +326,32 @@ test("menus close on outside clicks, scrolling or page changes and visual units 
   expect(contextMenu(row)).toBe(true);
 });
 
-test("bottom-left corner resizes both dimensions and retains size after closing or reopening", () => {
+test("left edge is an accessible width separator and retains width after closing or reopening", () => {
   const panel = createPdfTranslationPanel();
   const element = document.getElementById("mttPdfTranslatePanel");
   const handle = element.querySelector(".mttPdfTranslateResize");
-  expect(handle.getAttribute("aria-label")).toContain("크기 조절");
+  expect(handle.tagName).toBe("DIV");
+  expect(handle.getAttribute("role")).toBe("separator");
+  expect(handle.tabIndex).toBe(0);
+  expect(handle.getAttribute("aria-orientation")).toBe("vertical");
+  expect(handle.getAttribute("aria-label")).toContain("너비 조절");
+  expect(handle.getAttribute("aria-controls")).toBe(element.id);
+  expect(handle.getAttribute("aria-keyshortcuts")).toBe("ArrowLeft ArrowRight");
+  expect(handle.getAttribute("aria-valuemin")).toBe("260");
+  expect(Number(handle.getAttribute("aria-valuemax"))).toBeCloseTo(window.innerWidth * 0.85);
+  expect(handle.getAttribute("aria-valuenow")).toBe("400");
   expect(element.style.width).toBe("400px");
   expect(element.style.height).toBe("768px");
   pointer(handle, "pointerdown", 900, 750);
   pointer(window, "pointermove", 600, 500);
   expect(element.style.width).toBe("700px");
-  expect(element.style.height).toBe("518px");
+  expect(element.style.height).toBe("768px");
+  expect(handle.getAttribute("aria-valuenow")).toBe("700");
   expect(document.documentElement.style.getPropertyValue("--mttPdfTranslateWidth")).toBe("700px");
   expect(document.documentElement.classList.contains("mttPdfTranslateResizing")).toBe(true);
   pointer(window, "pointerup", 600, 500);
   expect(document.documentElement.classList.contains("mttPdfTranslateResizing")).toBe(false);
+  expect(JSON.parse(window.localStorage.getItem("mttPdfTranslationPanelSize"))).toEqual({ width: 700 });
   panel.close();
   panel.open();
   expect(element.style.width).toBe("700px");
@@ -348,25 +359,67 @@ test("bottom-left corner resizes both dimensions and retains size after closing 
   expect(document.documentElement.style.getPropertyValue("--mttPdfTranslateWidth")).toBe("");
   const reopened = createPdfTranslationPanel();
   expect(document.getElementById("mttPdfTranslatePanel").style.width).toBe("700px");
-  expect(document.getElementById("mttPdfTranslatePanel").style.height).toBe("518px");
+  expect(document.getElementById("mttPdfTranslatePanel").style.height).toBe("768px");
   reopened.destroy();
 });
 
-test("resize is bounded to the viewport and arrow keys resize without triggering viewer shortcuts", () => {
+test("vertical pointer movement is ignored and legacy saved height does not shorten the panel", () => {
+  window.localStorage.setItem("mttPdfTranslationPanelSize", JSON.stringify({ width: 700, height: 250 }));
+  const panel = createPdfTranslationPanel();
+  const element = document.getElementById("mttPdfTranslatePanel");
+  const handle = element.querySelector(".mttPdfTranslateResize");
+  expect(element.style.width).toBe("700px");
+  expect(element.style.height).toBe("768px");
+  pointer(handle, "pointerdown", 600, 500);
+  pointer(window, "pointermove", 600, 100);
+  pointer(window, "pointerup", 600, 100);
+  expect(element.style.width).toBe("700px");
+  expect(element.style.height).toBe("768px");
+  expect(JSON.parse(window.localStorage.getItem("mttPdfTranslationPanelSize"))).toEqual({ width: 700 });
+  window.innerHeight = 900;
+  window.dispatchEvent(new window.Event("resize"));
+  expect(element.style.width).toBe("700px");
+  expect(element.style.height).toBe("900px");
+  panel.destroy();
+});
+
+test("left and right keys adjust width while vertical arrows remain available to the viewer", () => {
   const panel = createPdfTranslationPanel();
   const element = document.getElementById("mttPdfTranslatePanel");
   const handle = element.querySelector(".mttPdfTranslateResize");
   const viewerKey = jest.fn();
   window.addEventListener("keydown", viewerKey);
-  handle.dispatchEvent(new window.KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true }));
-  handle.dispatchEvent(new window.KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true, cancelable: true }));
+  const left = new window.KeyboardEvent("keydown", { key: "ArrowLeft", bubbles: true, cancelable: true });
+  handle.dispatchEvent(left);
+  expect(left.defaultPrevented).toBe(true);
   expect(element.style.width).toBe("416px");
-  expect(element.style.height).toBe("752px");
+  const right = new window.KeyboardEvent("keydown", { key: "ArrowRight", shiftKey: true, bubbles: true, cancelable: true });
+  handle.dispatchEvent(right);
+  expect(right.defaultPrevented).toBe(true);
+  expect(element.style.width).toBe("368px");
+  expect(handle.getAttribute("aria-valuenow")).toBe("368");
   expect(viewerKey).not.toHaveBeenCalled();
+  for (const key of ["ArrowUp", "ArrowDown"]) {
+    const event = new window.KeyboardEvent("keydown", { key, bubbles: true, cancelable: true });
+    handle.dispatchEvent(event);
+    expect(event.defaultPrevented).toBe(false);
+  }
+  expect(viewerKey).toHaveBeenCalledTimes(2);
+  expect(element.style.width).toBe("368px");
+  expect(element.style.height).toBe("768px");
+  expect(JSON.parse(window.localStorage.getItem("mttPdfTranslationPanelSize"))).toEqual({ width: 368 });
+  panel.destroy();
+});
+
+test("width is bounded to the viewport, including viewports smaller than the minimum width", () => {
+  const panel = createPdfTranslationPanel();
+  const element = document.getElementById("mttPdfTranslatePanel");
+  const handle = element.querySelector(".mttPdfTranslateResize");
   pointer(handle, "pointerdown", 900, 750);
   pointer(window, "pointermove", -2000, -2000);
   expect(parseFloat(element.style.width)).toBeCloseTo(window.innerWidth * 0.85);
-  expect(element.style.height).toBe("200px");
+  expect(element.style.height).toBe("768px");
+  expect(Number(handle.getAttribute("aria-valuenow"))).toBeCloseTo(window.innerWidth * 0.85);
   pointer(window, "pointerup", -2000, -2000);
   pointer(handle, "pointerdown", 100, 200);
   pointer(window, "pointermove", 4000, 4000);
@@ -378,6 +431,24 @@ test("resize is bounded to the viewport and arrow keys resize without triggering
   window.dispatchEvent(new window.Event("resize"));
   expect(parseFloat(element.style.width)).toBeCloseTo(204);
   expect(element.style.height).toBe("150px");
+  expect(handle.getAttribute("aria-valuemin")).toBe("204");
+  expect(handle.getAttribute("aria-valuemax")).toBe("204");
+  expect(handle.getAttribute("aria-valuenow")).toBe("204");
+  panel.destroy();
+});
+
+test.each(["pointercancel", "blur"])("%s ends the width drag and restores normal pointer behavior", (eventType) => {
+  const panel = createPdfTranslationPanel();
+  const element = document.getElementById("mttPdfTranslatePanel");
+  const handle = element.querySelector(".mttPdfTranslateResize");
+  pointer(handle, "pointerdown", 900, 750);
+  pointer(window, "pointermove", 800, 650);
+  window.dispatchEvent(new window.Event(eventType));
+  pointer(window, "pointermove", 600, 500);
+  expect(element.style.width).toBe("500px");
+  expect(element.style.height).toBe("768px");
+  expect(document.documentElement.classList.contains("mttPdfTranslateResizing")).toBe(false);
+  expect(JSON.parse(window.localStorage.getItem("mttPdfTranslationPanelSize"))).toEqual({ width: 500 });
   panel.destroy();
 });
 
@@ -404,6 +475,7 @@ test("viewport clamping notifies an earlier viewer resize listener once with the
   window.dispatchEvent(new window.Event("resize"));
   expect(viewerResize).toHaveBeenCalledTimes(2);
   expect(viewerResize.mock.results.at(-1).value).toBe("340px");
+  expect(document.getElementById("mttPdfTranslatePanel").style.height).toBe(`${window.innerHeight}px`);
   panel.destroy();
 });
 

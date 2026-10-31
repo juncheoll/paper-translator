@@ -31,6 +31,15 @@ export function doclingPictureItems(items, layout, viewport) {
   }).map((item) => item.index));
 }
 
+export function doclingRunningMatterItems(items, layout, viewport) {
+  if (!compatible(layout, viewport)) return new Set();
+  const regions = layout.regions.filter((r) => ["page_header", "page_footer"].includes(r.label) && r.confidence >= 0.6);
+  return new Set(items.filter((item) => {
+    const area = item.box.width * item.box.height;
+    return area > 0 && regions.some((r) => overlap(item.box, r.bbox) / area >= 0.55);
+  }).map((item) => item.index));
+}
+
 // Geometry only: every surviving PDF.js item belongs to exactly one group or remains on the native path.
 export function assignLayoutItems(items, layout, viewport) {
   if (!compatible(layout, viewport)) return null;

@@ -52,6 +52,27 @@ test('translation can use its API while embeddings run in the browser', async ()
   expect(browser.permissions.contains).toHaveBeenCalledWith({ origins: ['https://translation.example/*'] });
 });
 
+test('the API broker accepts ten translation items using only the saved server settings', async () => {
+  const entries = Array.from({ length: 10 }, (_, index) => ({ id: `item-${index + 1}`, text: `Source ${index + 1}.` }));
+  const results = entries.map(entry => ({ id: entry.id, targetText: `Translated ${entry.text}` }));
+  TranslationService.translateBatchStrict.mockResolvedValue(results);
+  await expect(requestPdfApi({ operation: 'translateBatch', configuration: translation, entries, target: 'ko', context: 'Shared reference' }))
+    .resolves.toEqual(results);
+  expect(TranslationService.translateBatchStrict).toHaveBeenCalledTimes(1);
+  expect(TranslationService.translateBatchStrict.mock.calls[0].slice(0, 5)).toEqual([entries, 'auto', 'ko', settings, 'Shared reference']);
+  expect(browser.permissions.contains).toHaveBeenCalledWith({ origins: ['https://translation.example/*'] });
+  expect(client.postMessage.mock.calls[0][0].payload).not.toHaveProperty('apiKey');
+});
+
+test.each([
+  ['eleven items', Array.from({ length: 11 }, (_, index) => ({ id: `item-${index}`, text: 'Source.' }))],
+  ['more than 900 source characters', [{ id: 'one', text: 'a'.repeat(450) }, { id: 'two', text: 'b'.repeat(451) }]],
+])('the API broker rejects %s before calling the translation service', async (_, entries) => {
+  await expect(requestPdfApi({ operation: 'translateBatch', configuration: translation, entries, target: 'ko' }))
+    .rejects.toMatchObject({ code: 'PDF_API_REQUEST' });
+  expect(TranslationService.translateBatchStrict).not.toHaveBeenCalled();
+});
+
 test('embedding rejects the translation address and stale embedding format', async () => {
   await expect(requestPdfApi({ operation: 'embed', input: ['Source'], configuration: translation })).rejects.toMatchObject({ code: 'PDF_API_CONFIG_CHANGED' });
   await expect(requestPdfApi({ operation: 'embed', input: ['Source'], configuration: { ...embedding, type: 'openai' } })).rejects.toMatchObject({ code: 'PDF_API_CONFIG_CHANGED' });

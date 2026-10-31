@@ -438,7 +438,7 @@
     "message": "설정"
   },
   "PDF_Translation_Resize": {
-    "message": "번역 패널 크기 조절 (화살표 키)"
+    "message": "번역 패널 너비 조절 (좌우 화살표 키)"
   },
   "PDF_Translate_Page": {
     "message": "이 페이지 번역"

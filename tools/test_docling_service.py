@@ -11,8 +11,41 @@ import unittest
 from unittest import mock
 import urllib.error
 import urllib.request
+from contextlib import contextmanager, nullcontext
 from pathlib import Path
 from docling_service import DEFAULT_ORIGIN, LayoutServer, LayoutStore
+
+
+@contextmanager
+def windows_temporary_file_sharing(publish_error=None):
+    """Reject replacing/removing an open temporary file on every test platform."""
+    real_temporary = tempfile.NamedTemporaryFile
+    real_replace, real_unlink = os.replace, Path.unlink
+    streams = []
+
+    def create(*args, **kwargs):
+        stream = real_temporary(*args, **kwargs)
+        streams.append(stream)
+        return stream
+
+    def require_closed(path):
+        if any(Path(stream.name) == Path(path) and not stream.closed for stream in streams):
+            raise PermissionError("The temporary file is still open (Windows sharing lock)")
+
+    def replace(source, destination):
+        require_closed(source)
+        if publish_error:
+            raise publish_error
+        return real_replace(source, destination)
+
+    def unlink(path, *args, **kwargs):
+        require_closed(path)
+        return real_unlink(path, *args, **kwargs)
+
+    with mock.patch("docling_service.tempfile.NamedTemporaryFile", side_effect=create), \
+            mock.patch("docling_service.os.replace", side_effect=replace), \
+            mock.patch.object(Path, "unlink", unlink):
+        yield streams
 
 
 class FakeEngine:
@@ -74,6 +107,32 @@ class ServiceTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.store.analyze(self.document_id, self.pdf+b"changed")
         self.assertEqual(self.engine.calls, 1)
+
+    def test_http_analysis_publishes_closed_temporary_file_with_windows_sharing_rules(self):
+        path = "/v1/layout/" + self.document_id
+        with windows_temporary_file_sharing() as streams:
+            status, _, computed = self.request(path, "POST", self.pdf, **{"Content-Type": "application/pdf"})
+            self.assertEqual(status, 200)
+            self.assertEqual(computed["cache"], "computed")
+            self.assertEqual(self.request(path)[2]["cache"], "disk")
+        self.assertEqual(len(streams), 1)
+        self.assertTrue(all(stream.closed for stream in streams))
+        self.assertEqual(list(self.store.directory.iterdir()), [self.store.directory / f"{self.document_id}.json"])
+        self.assertEqual(self.engine.calls, 1)
+
+    def test_failed_cache_write_or_publish_closes_file_before_cleanup(self):
+        for failure in ("write", "publish"):
+            with self.subTest(failure=failure):
+                error = OSError(f"synthetic {failure} failure")
+                with windows_temporary_file_sharing(error if failure == "publish" else None) as streams:
+                    dump_failure = mock.patch("docling_service.json.dump", side_effect=error) if failure == "write" else nullcontext()
+                    with dump_failure, self.assertRaisesRegex(OSError, f"synthetic {failure} failure"):
+                        self.store.analyze(self.document_id, self.pdf)
+                self.assertEqual(len(streams), 1)
+                self.assertTrue(all(stream.closed for stream in streams))
+                self.assertEqual(list(self.store.directory.iterdir()), [])
+                self.assertEqual(self.store.analyses, 0)
+        self.assertEqual(self.store.analyze(self.document_id, self.pdf)["cache"], "computed")
 
     def test_simultaneous_identical_requests_only_analyze_once(self):
         results = []

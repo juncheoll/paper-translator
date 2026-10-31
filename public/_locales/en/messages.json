@@ -438,7 +438,7 @@
     "message": "Settings"
   },
   "PDF_Translation_Resize": {
-    "message": "Resize translation panel (arrow keys)"
+    "message": "Resize translation panel width (left and right arrow keys)"
   },
   "PDF_Translate_Page": {
     "message": "Translate this page"

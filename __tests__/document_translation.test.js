@@ -666,6 +666,26 @@ test("four sentences use one translation request and one query embedding batch w
   expect(run.embed).toHaveBeenCalledTimes(2);
 });
 
+test("eleven short sentences use a ten-item batch and one individual request with reusable per-sentence results", async () => {
+  const sources = Array.from({ length: 11 }, (_, index) => `Source sentence number ${index + 1}.`);
+  const page = { ...batchPage, blocks: [{ ...batchPage.blocks[0], text: sources.join(" ") }] };
+  const translateBatch = jest.fn(async (entries) => batchAnswer(entries).reverse());
+  const run = harness({ pages: [page], translateBatch });
+  await run.controller.translatePage();
+  expect(translateBatch).toHaveBeenCalledTimes(1);
+  expect(translateBatch.mock.calls[0][0]).toEqual(sources.slice(0, 10).map((text, index) => ({ id: `p1-b0-s${index + 1}`, text })));
+  expect(run.translate.mock.calls.map(([text]) => text)).toEqual([sources[10]]);
+  const rendered = run.rendered.at(-1);
+  expect(rendered.blocks.map(unit => rendered.translations[unit.id].text)).toEqual(sources.map((text, index) =>
+    `${index < 10 ? "Batch" : "Translated"} ${text}`));
+  expect(run.panel.setProgress).toHaveBeenLastCalledWith({ completed: 11, total: 11 });
+  const reopened = harness({ pages: [page], states: run.states, translateBatch });
+  await reopened.controller.translatePage();
+  expect(translateBatch).toHaveBeenCalledTimes(1);
+  expect(reopened.translate).not.toHaveBeenCalled();
+  expect(reopened.rendered.at(-1).translations).toEqual(rendered.translations);
+});
+
 test("incomplete batch mappings are discarded and individually recovered without repeated bad batch attempts", async () => {
   const page = { ...batchPage, blocks: [{ ...batchPage.blocks[0], text: `${batchPage.blocks[0].text} Fifth source sentence.` }] };
   const translateBatch = jest.fn(async (entries) => batchAnswer(entries).slice(0, 2));
@@ -1131,6 +1151,49 @@ test('upgrading the visual layout reparses but reuses unchanged sentence transla
  const second=harness({pages:[changed],states:legacy});await second.controller.translatePage(1);
  expect(second.readPage).toHaveBeenCalledTimes(1);expect(second.translate).not.toHaveBeenCalled();expect(second.embed).not.toHaveBeenCalled();
  expect(second.rendered.at(-1).translations['p1-new-body-s1'].text).toContain('Translated Source paragraph');
+});
+
+test('v11 parsed header caches are reparsed while unchanged Docling geometry and sentence results are reused', async () => {
+  const block = (id, text, itemIndex, kind = 'paragraph') => ({ id, text, kind,
+    bbox: { x: 40, y: 100 + itemIndex * 12, width: 220, height: 10 }, sourceIndices: [itemIndex],
+    textSpans: [{ start: 0, end: text.length, itemIndex, sourceStart: 0, sourceEnd: text.length }] });
+  const first = block('p1-before', 'The model distributes experts', 0);
+  const header = block('p1-stamp', 'arXiv:2610.03203v1 [cs.DC] 2 Oct 2026', 1, 'heading');
+  const last = block('p1-after', 'across devices.', 2);
+  const unchanged = block('p1-unchanged', 'Each device stores a subset of weights.', 3);
+  const layout = { pageNumber: 1, width: 600, height: 800,
+    regions: [{ id: 1, label: 'page_header', confidence: .95, cells: [],
+      bbox: { x: 10, y: 80, width: 20, height: 400 } }] };
+  const loadLayout = jest.fn(async () => ({ pages: [layout], layoutIdentity: ['docling-native-v1', 'model-a'], cache: 'browser' }));
+  const old = harness({ pages: [{ ...fixtures[0], blocks: [first, header, last, unchanged] }], loadLayout });
+  await old.controller.translatePage(1);
+  const states = new Map();
+  for (const [key, value] of old.states) {
+    if (key.endsWith(':layout')) { states.set(key, copy(value)); continue; }
+    const separator = key.lastIndexOf(':page:');
+    const identity = JSON.parse(separator >= 0 ? key.slice(0, separator) : key), snapshot = copy(value);
+    if (identity[0] === 'mtt-pdf') { identity[1] = 11; snapshot.version = 11; }
+    else { const indexIdentity = JSON.parse(identity[0]); indexIdentity[1] = 11; identity[0] = JSON.stringify(indexIdentity); }
+    states.set(JSON.stringify(identity) + (separator >= 0 ? key.slice(separator) : ''), snapshot);
+  }
+  const text = `${first.text} ${last.text}`;
+  const joined = { ...first, id: 'p1-body', text, sourceIndices: [0, 2],
+    textSpans: [...first.textSpans, ...last.textSpans.map(span => ({ ...span,
+      start: span.start + first.text.length + 1, end: span.end + first.text.length + 1 }))] };
+  const reparsed = { ...fixtures[0], blocks: [joined, { ...unchanged, id: 'p1-retained' }], excludedRegionIndices: [1] };
+  const run = harness({ pages: [reparsed], states, loadLayout });
+  await run.controller.translatePage(1);
+  expect(run.readPage).toHaveBeenCalledWith(expect.anything(), { mode: 'auto', layout });
+  expect(run.rendered.at(-1).blocks.map(unit => unit.text)).toEqual([text, unchanged.text]);
+  expect(run.rendered.at(-1).blocks[0].sourceRanges).toEqual([
+    { itemIndex: 0, start: 0, end: first.text.length }, { itemIndex: 2, start: 0, end: last.text.length },
+  ]);
+  expect(run.translate.mock.calls.map(([target]) => target)).toEqual([text]);
+  expect(run.rendered.at(-1).translations['p1-retained-s1']).toEqual({ status: 'done', text: `Translated ${unchanged.text}` });
+  expect(run.embed.mock.calls.map(([texts]) => texts)).toEqual([[text]]);
+  const newIndex = [...states.values()].find(state => state?.version === 12);
+  expect(newIndex.pages[0].blocks.map(unit => unit.text)).toEqual([text, unchanged.text]);
+  expect(newIndex.index.some(chunk => chunk.text.includes('arXiv'))).toBe(false);
 });
 
 function mathPage(){

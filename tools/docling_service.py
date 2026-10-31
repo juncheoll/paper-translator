@@ -154,13 +154,16 @@ class LayoutStore:
             data = {"schema": SCHEMA, "documentId": document_id, "identity": self.identity,
                     "pages": pages, "seconds": time.monotonic() - start}
             path = self.directory / f"{document_id}.json"
-            with tempfile.NamedTemporaryFile(mode="w", dir=self.directory, delete=False) as stream:
-                temporary = Path(stream.name)
-                try:
+            temporary = None
+            try:
+                with tempfile.NamedTemporaryFile(mode="w", dir=self.directory, delete=False) as stream:
+                    temporary = Path(stream.name)
                     json.dump(data, stream, ensure_ascii=False, allow_nan=False, separators=(",", ":"))
                     stream.flush()
-                    os.replace(temporary, path)
-                finally:
+                # Windows cannot replace or remove this file until its handle is closed.
+                os.replace(temporary, path)
+            finally:
+                if temporary is not None:
                     temporary.unlink(missing_ok=True)
             self.analyses += 1
             LOG.info("layout complete pages=%d seconds=%.3f", len(pages), data["seconds"])

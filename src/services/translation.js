@@ -119,7 +119,7 @@ export default class TranslationService {
     if (!configured(settings)) {
       throw new LocalTranslationError("CONFIGURATION", "The local translation endpoint or model is not configured");
     }
-    if (!Array.isArray(entries) || !entries.length || entries.length > 4 ||
+    if (!Array.isArray(entries) || !entries.length || entries.length > 10 ||
         entries.some((entry) => typeof entry?.id !== "string" || !entry.id || typeof entry.text !== "string" || !entry.text.trim()) ||
         new Set(entries.map((entry) => entry.id)).size !== entries.length ||
         entries.reduce((sum, entry) => sum + entry.text.length, 0) > 900) {

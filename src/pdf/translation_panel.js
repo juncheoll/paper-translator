@@ -32,9 +32,7 @@ export function createPdfTranslationPanel({
   let layoutEditing = false, layoutEditable = false;
   try {
     const saved = JSON.parse(win.localStorage.getItem(sizeKey));
-    for (const axis of ["width", "height"]) {
-      if (Number.isFinite(saved?.[axis]) && saved[axis] > 0) preferredSize[axis] = saved[axis];
-    }
+    if (Number.isFinite(saved?.width) && saved.width > 0) preferredSize.width = saved.width;
   } catch (_) {}
 
   const make = (tag, className, content) => {
@@ -169,10 +167,15 @@ export function createPdfTranslationPanel({
     #mttPdfTranslatePanel .mttPdfTranslateNotice { margin-left:2px; font-size:11px; color:#936315; }
     #mttPdfTranslatePanel .mttPdfTranslateNotice:not([hidden])::after { content:"†"; }
     #mttPdfTranslatePanel .mttPdfTranslateFormula, #mttPdfTranslatePanel .mttPdfTranslateTable { font-family:ui-monospace,monospace; white-space:pre-wrap; }
-    #mttPdfTranslatePanel .mttPdfTranslateResize { position:absolute; left:0; bottom:0; width:25px; height:25px;
-      padding:0; border:0; border-radius:0 8px 0 0; background:transparent; color:#899d8e;
-      cursor:nesw-resize; touch-action:none; user-select:none; font-size:18px; line-height:1; }
-    html.mttPdfTranslateResizing, html.mttPdfTranslateResizing * { user-select:none !important; cursor:nesw-resize !important; }
+    #mttPdfTranslatePanel .mttPdfTranslateResize { position:absolute; left:-5px; top:0; bottom:0; width:10px;
+      z-index:1; cursor:col-resize; touch-action:none; user-select:none; }
+    #mttPdfTranslatePanel .mttPdfTranslateResize::after { content:""; position:absolute; left:4px; top:0; bottom:0;
+      width:1px; background:var(--mttPdfLine); }
+    #mttPdfTranslatePanel .mttPdfTranslateResize:hover::after,
+    #mttPdfTranslatePanel .mttPdfTranslateResize:focus-visible::after,
+    html.mttPdfTranslateResizing #mttPdfTranslatePanel .mttPdfTranslateResize::after { width:3px; background:var(--mttPdfAccent); }
+    #mttPdfTranslatePanel .mttPdfTranslateResize:focus-visible { outline:2px solid var(--mttPdfAccent); outline-offset:-3px; }
+    html.mttPdfTranslateResizing, html.mttPdfTranslateResizing * { user-select:none !important; cursor:col-resize !important; }
     #mttPdfTranslateToggle { width:auto; min-width:36px; padding:0 7px; font:12px system-ui,sans-serif; }
     #mttPdfTranslateToggle::before { content:none; }
     @media (prefers-reduced-motion:reduce) {
@@ -283,11 +286,14 @@ export function createPdfTranslationPanel({
   failure.hidden = true;
   failure.setAttribute("role", "alert");
   const body = make("div", "mttPdfTranslateBody");
-  const resizeHandle = button("⤢", null, "mttPdfTranslateResize");
-  resizeHandle.setAttribute("aria-label", text("PDF_Translation_Resize", "번역 패널 크기 조절 (화살표 키)"));
+  const resizeHandle = make("div", "mttPdfTranslateResize");
+  resizeHandle.setAttribute("role", "separator");
+  resizeHandle.tabIndex = 0;
+  resizeHandle.setAttribute("aria-orientation", "vertical");
+  resizeHandle.setAttribute("aria-label", text("PDF_Translation_Resize", "번역 패널 너비 조절 (좌우 화살표 키)"));
   resizeHandle.title = resizeHandle.getAttribute("aria-label");
   resizeHandle.setAttribute("aria-controls", panel.id);
-  resizeHandle.setAttribute("aria-keyshortcuts", "ArrowLeft ArrowRight ArrowUp ArrowDown");
+  resizeHandle.setAttribute("aria-keyshortcuts", "ArrowLeft ArrowRight");
   settings.append(orderRow, linkedHoverRow, sourceVariableRow, layoutRow, editLayoutButton);
   panel.append(header, controls, settings, warnings, failure, body, footer, resizeHandle);
   const menu = make("div", "mttPdfTranslateMenu");
@@ -416,18 +422,21 @@ export function createPdfTranslationPanel({
   function resize() { win.dispatchEvent(new win.Event("resize")); }
   function applySize() {
     const maxWidth = win.innerWidth * 0.85;
-    const maxHeight = win.innerHeight;
+    const minWidth = Math.min(260, maxWidth);
     const clamp = (value, min, max) => Math.min(max, Math.max(Math.min(min, max), value));
     panelSize = {
-      width: clamp(preferredSize.width ?? Math.min(400, win.innerWidth * 0.45), 260, maxWidth),
-      height: clamp(preferredSize.height ?? maxHeight, 200, maxHeight),
+      width: clamp(preferredSize.width ?? Math.min(400, win.innerWidth * 0.45), minWidth, maxWidth),
+      height: win.innerHeight,
     };
     panel.style.width = `${panelSize.width}px`;
     panel.style.height = `${panelSize.height}px`;
+    resizeHandle.setAttribute("aria-valuemin", String(minWidth));
+    resizeHandle.setAttribute("aria-valuemax", String(maxWidth));
+    resizeHandle.setAttribute("aria-valuenow", String(panelSize.width));
     doc.documentElement.style.setProperty("--mttPdfTranslateWidth", `${panelSize.width}px`);
   }
   function saveSize() {
-    try { win.localStorage.setItem(sizeKey, JSON.stringify(panelSize)); } catch (_) {}
+    try { win.localStorage.setItem(sizeKey, JSON.stringify({ width: panelSize.width })); } catch (_) {}
   }
   function finishResize(event) {
     if (!drag || (event?.pointerId != null && event.pointerId !== drag.pointerId)) return;
@@ -440,14 +449,15 @@ export function createPdfTranslationPanel({
     if (drag || event.button !== 0) return;
     event.preventDefault();
     event.stopPropagation();
-    drag = { x: event.clientX, y: event.clientY, ...panelSize, pointerId: event.pointerId };
+    drag = { x: event.clientX, width: panelSize.width, pointerId: event.pointerId };
+    resizeHandle.focus({ preventScroll: true });
     doc.documentElement.classList.add("mttPdfTranslateResizing");
     try { resizeHandle.setPointerCapture?.(event.pointerId); } catch (_) {}
   }, { signal: listeners.signal });
   win.addEventListener("pointermove", (event) => {
     if (!drag || event.pointerId !== drag.pointerId) return;
     event.preventDefault();
-    preferredSize = { width: drag.width + drag.x - event.clientX, height: drag.height + event.clientY - drag.y };
+    preferredSize = { width: drag.width + drag.x - event.clientX };
     applySize();
     resize();
   }, { signal: listeners.signal });
@@ -461,11 +471,11 @@ export function createPdfTranslationPanel({
     if (before && (before.width !== panelSize.width || before.height !== panelSize.height)) resize();
   }, { signal: listeners.signal });
   resizeHandle.addEventListener("keydown", (event) => {
-    const delta = { ArrowLeft: [16, 0], ArrowRight: [-16, 0], ArrowUp: [0, -16], ArrowDown: [0, 16] }[event.key];
+    const delta = { ArrowLeft: 16, ArrowRight: -16 }[event.key];
     if (!delta) return;
     event.preventDefault();
     event.stopPropagation();
-    preferredSize = { width: panelSize.width + delta[0], height: panelSize.height + delta[1] };
+    preferredSize = { width: panelSize.width + delta * (event.shiftKey ? 3 : 1) };
     applySize();
     saveSize();
     resize();

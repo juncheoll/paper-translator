@@ -32,7 +32,7 @@ import {
 } from "./document_index";
 
 const EMBEDDING_MODEL = "embeddinggemma";
-const CACHE_VERSION = 11;
+const CACHE_VERSION = 12;
 const TRANSLATION_VERSION = "sentences-v4";
 const msg = (key, fallback) => getMessage(key) || fallback;
 
@@ -455,7 +455,7 @@ export function createPdfTranslationController({
       if (resultOf(block, pageNumber)?.status === "done") { progress(block.id); continue; }
       const group = [block];
       let chars = protectedMathText(block).length;
-      while (batchEnabled && batchable(block) && group.length < 4 && position < page.blocks.length) {
+      while (batchEnabled && batchable(block) && group.length < 10 && position < page.blocks.length) {
         const next = page.blocks[position];
         const length = protectedMathText(next).length;
         if (!batchable(next) || next.kind !== block.kind || resultOf(next, pageNumber)?.status === "done" || chars + length > 900) break;

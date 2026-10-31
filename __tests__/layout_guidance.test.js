@@ -53,6 +53,95 @@ test("Docling picture regions exclude chart text without touching overlapping ca
   expect(page.blocks[0].text).toBe("Body is protected.");
 });
 
+test("a rotated arXiv page header cannot enter a wrapped sentence or split its paragraph", () => {
+  const stamp = { str: "arXiv:2610.03203v1 [cs.DC] 2 Oct 2026", width: 650, height: 10, fontName: "body",
+    transform: [0, 10, -10, 0, 25, 80] };
+  const items = [item("The body sentence continues", 40, 100), stamp,
+    item("across these wrapped lines.", 40, 112)];
+  const page = orderTextItems(items, styles, viewport, { layout: layout([
+    region(1, "page_header", 15, 70, 10, 650),
+    region(2, "text", 40, 100, 200, 22, [cell(40, 100), cell(40, 112)]),
+  ]) });
+  expect(page.excludedRegionIndices).toEqual([1]);
+  expect(page.layoutSource).toBe("docling");
+  expect(page.blocks.map((block) => block.text)).toEqual(["The body sentence continues across these wrapped lines."]);
+  expect(page.blocks[0].sourceIndices).toEqual([0, 2]);
+  expect(page.warnings).not.toContain("Rotated text may require manual reading-order selection.");
+  const units = createSentenceUnits(page);
+  expect(units).toHaveLength(1);
+  expect(units[0].sourceRanges).toEqual([
+    { itemIndex: 0, start: 0, end: items[0].str.length },
+    { itemIndex: 2, start: 0, end: items[2].str.length },
+  ]);
+});
+
+test("a tall page-header stamp cannot disturb two-column reading order", () => {
+  const items = [item("Left paragraph starts", 40, 100, 220),
+    { str: "arXiv:2610.03203v1 [cs.DC] 2 Oct 2026", width: 650, height: 10, fontName: "body",
+      transform: [0, 10, -10, 0, 25, 80] },
+    item("Right paragraph starts", 330, 100, 220), item("and ends here.", 40, 112, 220),
+    item("and ends here too.", 330, 112, 220)];
+  const page = orderTextItems(items, styles, viewport, { layout: layout([
+    region(1, "page_header", 15, 70, 10, 650),
+    region(2, "text", 40, 100, 220, 22, [cell(40, 100, 220), cell(40, 112, 220)]),
+    region(3, "text", 330, 100, 220, 22, [cell(330, 100, 220), cell(330, 112, 220)]),
+  ]) });
+  expect(page.mode).toBe("two");
+  expect(page.blocks.map((block) => [block.column, block.text])).toEqual([
+    [1, "Left paragraph starts and ends here."], [2, "Right paragraph starts and ends here too."],
+  ]);
+  expect(page.blocks.flatMap((block) => block.sourceIndices)).toEqual([0, 3, 2, 4]);
+  expect(page.excludedRegionIndices).toEqual([1]);
+});
+
+test("automatic page headers and footers are excluded even when body layout falls back to native parsing", () => {
+  const items = [item("Running title", 40, 20), item("A body sentence spans", 40, 100),
+    item("two native text lines.", 40, 112), item("42", 280, 770, 20)];
+  const page = orderTextItems(items, styles, viewport, { layout: layout([
+    region(1, "page_header", 40, 20, 200, 10), region(2, "page_footer", 280, 770, 20, 10),
+  ]) });
+  expect(page.excludedRegionIndices).toEqual([0, 3]);
+  expect(page.blocks.map((block) => block.text)).toEqual(["A body sentence spans two native text lines."]);
+  expect(createSentenceUnits(page)[0].sourceRanges.map((range) => range.itemIndex)).toEqual([1, 2]);
+});
+
+test("excluding running headers and footers preserves explanatory footnotes", () => {
+  const items = [item("Running title", 40, 20), item("A body sentence.", 40, 100),
+    item("1 We use a fixed random seed in all experiments.", 40, 700, 200, 8), item("42", 280, 770, 20)];
+  const page = orderTextItems(items, styles, viewport, { layout: layout([
+    region(1, "page_header", 40, 20, 200, 10), region(2, "text", 40, 100, 200, 10),
+    region(3, "footnote", 40, 700, 200, 8), region(4, "page_footer", 280, 770, 20, 10),
+  ]) });
+  expect(page.excludedRegionIndices).toEqual([0, 3]);
+  expect(filterDocumentBody([page])[0].blocks.map((block) => [block.kind, block.text])).toEqual([
+    ["paragraph", items[1].str], ["footnote", items[2].str],
+  ]);
+});
+
+test("low-confidence, mismatched, or incidental page-header overlap cannot remove native body text", () => {
+  const items = [item("A body sentence remains intact.", 40, 100)];
+  const native = orderTextItems(items, styles, viewport);
+  const lowConfidence = { ...region(1, "page_header", 40, 100, 200, 10), confidence: .59 };
+  const mismatched = { ...layout([region(1, "page_header", 40, 100, 200, 10)]), width: 1200 };
+  const incidental = layout([region(1, "page_header", 40, 100, 20, 10)]);
+  for (const detections of [layout([lowConfidence]), mismatched, incidental]) {
+    expect(orderTextItems(items, styles, viewport, { layout: detections })).toEqual(native);
+  }
+});
+
+test("manual body corrections override automatic headers while manually classified headers stay excluded", () => {
+  const items = [item("Recovered body sentence.", 40, 100), item("Exclude this running title.", 40, 140)];
+  const page = orderTextItems(items, styles, viewport, { layout: layout([
+    region(1, "page_header", 40, 100, 200, 50),
+    { ...region(2, "text", 40, 100, 200, 10), manual: true, confidence: .1 },
+    { ...region(3, "page_header", 40, 140, 200, 10), manual: true, confidence: .1 },
+  ]) });
+  expect(page.blocks).toHaveLength(1);
+  expect(page.blocks[0]).toMatchObject({ text: "Recovered body sentence.", layoutManual: true });
+  expect(page.excludedRegionIndices).toEqual([1]);
+  expect(createSentenceUnits(page)[0].sourceRanges).toEqual([{ itemIndex: 0, start: 0, end: items[0].str.length }]);
+});
+
 test("sparse or mismatched geometry falls back without losing native items", () => {
   const items = [item("Original sentence.", 40, 100), item("Second sentence.", 40, 112)];
   const native = orderTextItems(items, styles, viewport);

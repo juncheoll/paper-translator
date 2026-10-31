@@ -37,6 +37,33 @@ test('batch maps numbered results to IDs and preserves per-item math instruction
   expect(ky.post.mock.calls[0][1].json.messages[1].content).toContain('within its item');
 });
 
+test.each(['api', 'browser'])('a ten-item %s batch maps S10 correctly and shares one context and output budget', async execution => {
+  const entries = Array.from({ length: 10 }, (_, index) => ({ id: `item-${index + 1}`, text: `Source ${index + 1}.` }));
+  const answer = response(entries.map((_, index) => `[S${index + 1}] 번역 ${index + 1}`).reverse().join('\n'));
+  ky.post.mockReturnValue({ json: async () => answer });
+  requestBrowserAi.mockResolvedValue(answer);
+  const results = await TranslationService.translateBatchStrict(entries, 'en', 'ko', { ...settings, llmExecution: execution }, 'Shared reference');
+  expect(results.map(item => [item.id, item.targetText])).toEqual(entries.map((entry, index) => [entry.id, `번역 ${index + 1}`]));
+  const body = execution === 'browser' ? requestBrowserAi.mock.calls[0][0] : ky.post.mock.calls[0][1].json;
+  expect(body).toMatchObject({ max_tokens: 1024, temperature: .1 });
+  expect(body.messages).toHaveLength(2);
+  expect(body.messages[0].content).toContain('Shared reference');
+  expect(body.messages[1].content).not.toContain('Shared reference');
+  expect(body.messages[1].content).toContain('exactly 10 lines');
+  expect(body.messages[1].content).toContain('[S10] Source 10.');
+  expect(execution === 'browser' ? requestBrowserAi : ky.post).toHaveBeenCalledTimes(1);
+  expect(execution === 'browser' ? ky.post : requestBrowserAi).not.toHaveBeenCalled();
+});
+
+test.each([
+  ['eleven items', Array.from({ length: 11 }, (_, index) => ({ id: `item-${index}`, text: 'Source.' }))],
+  ['more than 900 source characters', [{ id: 'one', text: 'a'.repeat(450) }, { id: 'two', text: 'b'.repeat(451) }]],
+])('batch rejects %s before sending a model request', async (_, entries) => {
+  await expect(TranslationService.translateBatchStrict(entries, 'en', 'ko', settings)).rejects.toMatchObject({ code: 'BATCH_FORMAT' });
+  expect(ky.post).not.toHaveBeenCalled();
+  expect(requestBrowserAi).not.toHaveBeenCalled();
+});
+
 test.each(['[S1] 하나', '[S1] 하나\n[S1] 반복', '[S1] 하나 [S2] 둘', '설명\n[S1] 하나\n[S2] 둘'])('batch rejects damaged labels: %s', async content => {
   ky.post.mockReturnValue({ json: async () => response(content) });
   await expect(TranslationService.translateBatchStrict([{ id: 'one', text: 'One.' }, { id: 'two', text: 'Two.' }], 'en', 'ko', settings)).rejects.toMatchObject({ code: 'BATCH_FORMAT' });

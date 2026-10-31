@@ -48,7 +48,7 @@ function validate(payload) {
         (options.seed !== undefined && (!Number.isInteger(options.seed) || options.seed < 0 || options.seed > 0x7fffffff))) invalid();
     if (payload.operation === "translate") {
       if (!text(payload.text, 20000)) invalid();
-    } else if (!Array.isArray(payload.entries) || !payload.entries.length || payload.entries.length > 4 ||
+    } else if (!Array.isArray(payload.entries) || !payload.entries.length || payload.entries.length > 10 ||
         payload.entries.some(entry => !keysOnly(entry, ["id", "text"]) || !text(entry.id, 1000) || !text(entry.text, 900)) ||
         new Set(payload.entries.map(entry => entry.id)).size !== payload.entries.length ||
         payload.entries.reduce((sum, entry) => sum + entry.text.length, 0) > 900) invalid();

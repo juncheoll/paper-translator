@@ -1,6 +1,6 @@
 import { sourceText, concatText, sliceText, normalizeWhitespace } from "./text_provenance.js";
 import { extractGraphicRegions, figureRegionsNearCaptions } from "./figure_regions.js";
-import { assignLayoutItems, doclingPictureItems, manualRegionItems } from "./layout_guidance.js";
+import { assignLayoutItems, doclingPictureItems, doclingRunningMatterItems, manualRegionItems } from "./layout_guidance.js";
 import { pdfFontNames, pdfFontMetrics, isMathFontName, extractInlineMathRegions } from "./inline_math.js";
 
 // PDF drawing order is not reading order. Keep item provenance so no text is lost.
@@ -289,6 +289,7 @@ export function orderTextItems(rawItems, styles = {}, viewport, options = {}) {
   const positioned = positionedItems(rawItems, styles, viewport, options.fontNames);
   const manualItems = manualRegionItems(positioned, options.layout, viewport);
   const layoutPictures = doclingPictureItems(positioned, options.layout, viewport);
+  const runningMatter = doclingRunningMatterItems(positioned, options.layout, viewport);
   const figureRegions = figureRegionsNearCaptions(captionLinesOf(positioned), options.graphicRegions || []);
   const excludedFigureIndices = [], excludedRegionIndices = [];
   const items = positioned.filter((item) => {
@@ -298,6 +299,10 @@ export function orderTextItems(rawItems, styles = {}, viewport, options = {}) {
         excludedRegionIndices.push(item.index); return false;
       }
       return true;
+    }
+    // Tall or rotated margin stamps must not participate in line, column or paragraph geometry.
+    if (runningMatter.has(item.index)) {
+      excludedRegionIndices.push(item.index); return false;
     }
     const inside = figureRegions.some((box) =>
       Math.min(right(item.box), right(box)) - Math.max(item.box.x, box.x) >= item.box.width * 0.85 &&
